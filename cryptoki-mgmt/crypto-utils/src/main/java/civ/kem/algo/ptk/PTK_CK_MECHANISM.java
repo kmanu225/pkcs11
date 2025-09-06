@@ -1,4 +1,4 @@
-package civ.pkcs11.jsun.ptk;
+package civ.kem.algo.ptk;
 import sun.security.pkcs11.wrapper.CK_MECHANISM;
 
 

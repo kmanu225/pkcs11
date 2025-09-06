@@ -1,4 +1,4 @@
-package civ.pkcs11.jsun.ptk;
+package civ.kem.algo.ptk;
 
 public class PTK_Constants{
     public static long maxObjects = 100;

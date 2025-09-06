@@ -2,11 +2,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>pkcs11-api-jsun</artifactId>
+	<artifactId>crypto-utils</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>pkcs11</groupId>
-		<artifactId>programs</artifactId>
+		<groupId>civ.kem</groupId>
+		<artifactId>cryptoki-mgmt</artifactId>
 		<version>1.0</version>
 	</parent>
 	<dependencies>
@@ -109,7 +109,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>civ.pkcs11.jsun.Main</mainClass>
+							<mainClass>civ.kem.algo.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

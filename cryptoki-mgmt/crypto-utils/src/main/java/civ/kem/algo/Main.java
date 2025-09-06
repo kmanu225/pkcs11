@@ -1,4 +1,4 @@
-package civ.pkcs11.jsun;
+package civ.kem.algo;
 
 public class Main {
     public static void main(String[] args) {

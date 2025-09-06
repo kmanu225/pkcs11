@@ -1,4 +1,4 @@
-package civ.pkcs11.jsun.ptk;
+package civ.kem.algo.ptk;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;

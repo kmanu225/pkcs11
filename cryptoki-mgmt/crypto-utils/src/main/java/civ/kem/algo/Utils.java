@@ -1,4 +1,6 @@
-package civ.pkcs11.jsun;
+package civ.kem.algo;
+
+import java.io.File;
 
 import sun.security.pkcs11.wrapper.CK_INFO;
 import sun.security.pkcs11.wrapper.CK_SLOT_INFO;
@@ -26,7 +28,7 @@ import sun.security.pkcs11.wrapper.PKCS11Exception;
  * <li><i>slotId</i> the realted slot Id of the slot or token information to
  * retrieve, default (all)
  */
-public class GetInfo {
+public class Utils {
 
     /**
      * easy access to System.out.println
@@ -138,6 +140,22 @@ public class GetInfo {
         } else {
             return version.major + "." + version.minor;
         }
+    }
+
+    /**
+     * Set PKCS#11 library path.
+     *
+     * @return The path of the cryptoki library.
+     */
+    public static String setupLibrary(String libPath) throws Exception {
+        String library;
+
+        if (new File(libPath).exists()) {
+            library = libPath;
+        } else {
+            throw new Exception("Library not found on the current plateform.");
+        }
+        return library;
     }
 
     static void DisplayGeneralInformation(PKCS11 p11) throws PKCS11Exception {

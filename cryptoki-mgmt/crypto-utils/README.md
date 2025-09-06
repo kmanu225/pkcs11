@@ -39,7 +39,7 @@ See example below:
 To get information about the cryptographic token:
 
 ```sh
-java --add-exports jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED -cp jsun-<version>.jar civ.pkcs11.jsun.GetInfo -info -slot -token 0
+java --add-exports jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED -cp jsun-<version>.jar civ.kem.algo.GetInfo -info -slot -token 0
 ```
 
 ## Troubleshooting
