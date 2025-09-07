@@ -1,6 +1,9 @@
 package civ.kem.algo;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import sun.security.pkcs11.wrapper.CK_INFO;
 import sun.security.pkcs11.wrapper.CK_SLOT_INFO;
@@ -29,28 +32,6 @@ import sun.security.pkcs11.wrapper.PKCS11Exception;
  * retrieve, default (all)
  */
 public class Utils {
-
-    /**
-     * easy access to System.out.println
-     */
-    static public void println(String s) {
-        System.out.println(s);
-    }
-
-    /**
-     * display runtime usage of the class
-     */
-    public static void usage() {
-        println("java ...GetInfo (-info, -slot, -token) [<slotId>]");
-        println("");
-        println("-info          get the General information");
-        println("-slot          get the Slot Information of the specified slot");
-        println("-token         get the Token Information of the token in the specified slot");
-        println("<slotId>       realted slot Id of the slot or token information to retrieve, default (all)");
-        println("");
-
-        System.exit(1);
-    }
 
     /**
      * main execution method
@@ -92,10 +73,8 @@ public class Utils {
         }
 
         try {
-            String ptk7Windows = "Library";
 
-            String library = Utils.setupLibrary(ptk7Windows);
-            PKCS11 p11 = PKCS11.getInstance(library, "C_GetFunctionList", null, false);
+            PKCS11 p11 = PKCS11.getInstance(loadLibrary(), "C_GetFunctionList", null, false);
             if (bGetGeneralInfo) {
                 DisplayGeneralInformation(p11);
             }
@@ -134,12 +113,61 @@ public class Utils {
         }
     }
 
-    static String versionString(CK_VERSION version) {
-        if (version.minor < 10) {
-            return version.major + ".0" + version.minor;
-        } else {
-            return version.major + "." + version.minor;
+    /**
+     * Loads a properties file from the classpath (e.g. src/main/resources).
+     *
+     * @param fileName the name of the properties file (e.g. "app.properties")
+     * @return a Properties object containing the loaded key-value pairs
+     * @throws IOException if the file is not found or cannot be read
+     */
+    public static Properties loadProperties(String fileName) throws IOException {
+        Properties props = new Properties();
+
+        try (InputStream input = Utils.class.getClassLoader().getResourceAsStream(fileName)) {
+            if (input == null) {
+                throw new IOException("Properties file not found: " + fileName);
+            }
+            props.load(input);
         }
+
+        return props;
+    }
+
+    /**
+     * Opens a PKCS11 session with on a specific token slot.
+     *
+     * @param library Cryptoki library, dynamically loaded (.dll on Windows, .so
+     * on Unix/Linux).
+     * @param slotId The slot identification number.
+     * @param flags Session information (eg. PKCS11Constants.CKF_SERIAL_SESSION |
+     * PKCS11Constants.CKF_RW_SESSION).
+     * @return a Properties object containing the loaded key-value pairs
+     */
+    public static long OpenSession(PKCS11 p11, long slotId, long flags) throws Exception {
+        long hSession = p11.C_OpenSession(slotId, flags, null, null);
+        return hSession;
+    }
+
+    /**
+     * display runtime usage of the class
+     */
+    public static void usage() {
+        println("java ...GetInfo (-info, -slot, -token) [<slotId>]");
+        println("");
+        println("-info          get the General information");
+        println("-slot          get the Slot Information of the specified slot");
+        println("-token         get the Token Information of the token in the specified slot");
+        println("<slotId>       realted slot Id of the slot or token information to retrieve, default (all)");
+        println("");
+
+        System.exit(1);
+    }
+
+    /**
+     * easy access to System.out.println
+     */
+    static public void println(String s) {
+        System.out.println(s);
     }
 
     /**
@@ -148,14 +176,25 @@ public class Utils {
      * @return The path of the cryptoki library.
      */
     public static String setupLibrary(String libPath) throws Exception {
-        String library;
-
         if (new File(libPath).exists()) {
-            library = libPath;
+            return libPath;
         } else {
-            throw new Exception("Library not found on the current plateform.");
+            throw new Exception("Library not found on the plateform.");
         }
-        return library;
+    }
+
+    public static String loadLibrary() throws Exception {
+        Properties props = Utils.loadProperties("library.properties");
+        String library = props.getProperty("cryptoki.library");
+        return setupLibrary(library);
+    }
+
+    static String versionString(CK_VERSION version) {
+        if (version.minor < 10) {
+            return version.major + ".0" + version.minor;
+        } else {
+            return version.major + "." + version.minor;
+        }
     }
 
     static void DisplayGeneralInformation(PKCS11 p11) throws PKCS11Exception {
