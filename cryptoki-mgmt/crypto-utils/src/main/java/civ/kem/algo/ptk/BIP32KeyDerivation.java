@@ -41,7 +41,7 @@ public class BIP32KeyDerivation {
      *
      * @return The path of the cryptoki library.
      */
-    public static String setupLibrary(String libPath) throws Exception {
+    public static String setLibrary(String libPath) throws Exception {
         String library;
 
         if (new File(libPath).exists()) {
@@ -89,7 +89,7 @@ public class BIP32KeyDerivation {
              */
             String ptk7Windows = "C:\\Program Files\\Safenet\\ProtectToolkit 7\\C SDK\\bin\\sw\\p11.dll";
 
-            String library = setupLibrary(ptk7Windows);
+            String library = setLibrary(ptk7Windows);
             PKCS11 p11 = PKCS11.getInstance(library, "C_GetFunctionList", null, false);
 
             /*
