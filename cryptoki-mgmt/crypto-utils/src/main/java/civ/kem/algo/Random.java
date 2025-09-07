@@ -21,9 +21,17 @@ public class Random {
     }
 
     /**
-     * Generate a random value using a seed.
+     * Seeds the random number generator of the PKCS#11 token.
      *
-     * @param
+     * <p>
+     * This method mixes the given seed value into the token's random number
+     * generator, improving randomness. Some tokens may ignore the provided seed
+     * if they use a true hardware random number generator (TRNG).</p>
+     *
+     * @param p11 The PKCS#11 Cryptoki library interface.
+     * @param hSession Handle of the session in which to seed the RNG.
+     * @param seed The seed value to inject into the random number generator.
+     * @throws Exception if the seeding operation fails.
      */
     public static void seedRandom(PKCS11 p11, long hSession, byte[] seed) throws Exception {
         p11.C_SeedRandom(hSession, seed);

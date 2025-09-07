@@ -50,7 +50,7 @@ public class Asymmetric {
      * @return The generated signature.
      * @throws PKCS11Exception If an error occurs during signing.
      */
-    static byte[] Sign(PKCS11 p11, long hSession, CK_MECHANISM signMech, long hPrivateKey, byte[] hash, long hashLen) throws PKCS11Exception {
+    public static byte[] sign(PKCS11 p11, long hSession, CK_MECHANISM signMech, long hPrivateKey, byte[] hash, long hashLen) throws PKCS11Exception {
         p11.C_SignInit(hSession, signMech, hPrivateKey);
         return p11.C_Sign(hSession, hash);
     }
@@ -66,7 +66,7 @@ public class Asymmetric {
      * @param signature The signature to verify.
      * @throws PKCS11Exception If the verification fails or an error occurs.
      */
-    static void VerifySignature(PKCS11 p11, long hSession, CK_MECHANISM verifyMech, long hPublicKey, byte[] data, byte[] signature) throws PKCS11Exception {
+    public static void verifySignature(PKCS11 p11, long hSession, CK_MECHANISM verifyMech, long hPublicKey, byte[] data, byte[] signature) throws PKCS11Exception {
         p11.C_VerifyInit(hSession, verifyMech, hPublicKey);
         p11.C_Verify(hSession, data, signature);
     }

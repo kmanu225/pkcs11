@@ -82,45 +82,40 @@ public class GetInfo {
             usage();
         }
 
-        try {
+        PKCS11 p11 = Utils.setMonoThreadedCryptokiFunctions();
+        if (bGetGeneralInfo) {
+            DisplayGeneralInformation(p11);
+        }
 
-            PKCS11 p11 = Utils.setMonoThreadedCryptokiFunctions();
-            if (bGetGeneralInfo) {
-                DisplayGeneralInformation(p11);
-            }
+        if (slotId == -1) {
+            /* display information for all slots */
+            long[] slotList;
 
-            if (slotId == -1) {
-                /* display information for all slots */
-                long[] slotList;
+            /* get the slot list */
+            slotList = p11.C_GetSlotList(PKCS11Constants.TRUE);
 
-                /* get the slot list */
-                slotList = p11.C_GetSlotList(PKCS11Constants.TRUE);
-
-                /* enumerate over the list, displaying the relevant inforamtion */
-                for (int i = 0; i < slotList.length; ++i) {
-                    if (bGetSlotInfo) {
-                        DisplaySlotInformation(p11, slotList[i]);
-                    }
-
-                    if (bGetTokenInfo) {
-                        DisplayTokenInformation(p11, slotList[i]);
-                    }
-                }
-            } else {
+            /* enumerate over the list, displaying the relevant inforamtion */
+            for (int i = 0; i < slotList.length; ++i) {
                 if (bGetSlotInfo) {
-                    DisplaySlotInformation(p11, slotId);
+                    DisplaySlotInformation(p11, slotList[i]);
                 }
 
                 if (bGetTokenInfo) {
-                    DisplayTokenInformation(p11, slotId);
+                    DisplayTokenInformation(p11, slotList[i]);
                 }
             }
+        } else {
+            if (bGetSlotInfo) {
+                DisplaySlotInformation(p11, slotId);
+            }
 
-            p11.C_Finalize(null);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            if (bGetTokenInfo) {
+                DisplayTokenInformation(p11, slotId);
+            }
         }
+
+        p11.C_Finalize(null);
+
     }
 
     /**

@@ -10,7 +10,7 @@ The first thing to know is **prefixes**. They are summarized in the table below.
 * **CK\_** : Data type or general constant (e.g., `CK_BOOL`)
 * **CKA\_** : Attribute (e.g., `PKCS11Constants.CKA_TOKEN`)
 * **CKM\_** : Mechanism type (e.g., `CKM_AES_KEY_WRAP`)
-* **CKF\_** : Flag, often used in conjunction with `CKM_xx`
+* **CKF\_** : Flag, often used in conjunction with `CKM_`or `CK_ATTRIBUTE[]`
 
 ![alt text](ressources/prefixes.png)
 
