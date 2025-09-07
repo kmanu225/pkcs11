@@ -16,18 +16,33 @@ public class Random {
      * @param randomDataLength The length of the data to be generated.
      * @throws Exception If an error occurs during encryption.
      */
-    public static void GenerateRandomData(PKCS11 p11, long hSession, byte[] randomData, long randomDataLength) throws Exception {
+    public static void generateRandomData(PKCS11 p11, long hSession, byte[] randomData, long randomDataLength) throws Exception {
         p11.C_GenerateRandom(hSession, randomData);
-        Utils.println("Random value: " + HexFormat.of().formatHex(randomData));
+    }
 
+    /**
+     * Generate a random value using a seed.
+     *
+     * @param
+     */
+    public static void seedRandom(PKCS11 p11, long hSession, byte[] seed) throws Exception {
+        p11.C_SeedRandom(hSession, seed);
     }
 
     public static void main(String[] args) throws Exception {
-        PKCS11 p11 = PKCS11.getInstance(Utils.loadLibrary(), "C_GetFunctionList", null, false);
-        long hSession = Utils.OpenSession(p11, 2, PKCS11Constants.CKF_RW_SESSION | PKCS11Constants.CKF_SERIAL_SESSION);
+        PKCS11 p11 = Utils.setMonoThreadedCryptokiFunctions();
+        long hSession = Utils.openSession(p11, 2, PKCS11Constants.CKF_RW_SESSION | PKCS11Constants.CKF_SERIAL_SESSION);
 
         byte[] randomData = new byte[20];
-        GenerateRandomData(p11, hSession, randomData, hSession);
-        p11.C_CloseSession(hSession);
+        generateRandomData(p11, hSession, randomData, hSession);
+        Utils.println("Random value: " + HexFormat.of().formatHex(randomData));
+
+        String seed = "deadbeefdeadbeef";
+        Utils.println("Seed value: " + seed);
+        byte[] bSeed = HexFormat.of().parseHex(seed);
+        seedRandom(p11, hSession, bSeed);
+        Utils.println("Modified value of the seed : " + HexFormat.of().formatHex(bSeed));
+
+        Utils.closeSession(p11, hSession);
     }
 }
