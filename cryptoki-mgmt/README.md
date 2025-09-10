@@ -1,18 +1,56 @@
-# Try PKCS#11  
+# Try PKCS#11
 
-The best way to learn PKCS#11 is to use it, whether on a real cryptographic device or an emulated one. This repository aims to share source code for working with real cryptographic devices using PKCS#11.  
+The best way to learn **PKCS#11** is by practicing with it—either on a real cryptographic device or with an emulator.
+This repository provides example source code for interacting with cryptographic tokens using PKCS#11.
 
-## SoftHSM  
+## Prerequisites
 
-SoftHSM (Software Hardware Security Module) is an emulated HSM that provides a convenient environment to experiment with PKCS#11 without needing physical hardware. It’s ideal for development and testing.  
+* **Java 9 or higher**
+* **Maven** (for building the project)
+* **Cryptographic token** (or emulator) and its corresponding **PKCS#11 driver/library**
 
-## Usage  
+## Usage (Example with crypto-utils)
 
-You can interact with PKCS#11 through:  
+### 1. Configure the PKCS#11 Library
 
-- **Command Line Interface (CLI):** Tools provided by the product owner to manage cryptographic keys and operations.  
-- **Programming Interfaces:** Integrate PKCS#11 into applications with languages like Java, Python, C.  
+Update the `library.properties` file to point to your PKCS#11 library:
 
-## References  
+```
+cryptoki-mgmt/crypto-utils/src/main/resources/library.properties
+```
 
-- [SoftHSM Documentation](https://opendnssec.readthedocs.io/en/latest/softhsm/)  
+### 2. Building the Project
+
+To build the project with Maven:
+
+```sh
+mvn clean package
+```
+
+The output JAR will be generated in the `target/` directory.
+
+### 3. Run the Predefined Main Class
+
+To run the default entry point:
+
+```sh
+java -jar crypto-utils-<version>.jar
+```
+
+### 4. Run a Specific Module
+
+To execute a specific module, use:
+
+```sh
+java \
+  --add-exports jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED \
+  -cp crypto-utils-<version>.jar <module> <arguments>
+```
+
+#### Example: Get Token Information
+
+```sh
+java \
+  --add-exports jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED \
+  -cp crypto-utils-<version>.jar civ.kem.algo.GetInfo -info -slot -token 0
+```

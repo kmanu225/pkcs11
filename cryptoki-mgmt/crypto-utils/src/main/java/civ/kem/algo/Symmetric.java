@@ -75,4 +75,5 @@ public class Symmetric {
         CK_MECHANISM keyGenMech = new CK_MECHANISM(mechanismType);
         return p11.C_GenerateKey(session, keyGenMech, template);
     }
+
 }
