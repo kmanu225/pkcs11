@@ -1,6 +1,5 @@
 package civ.kem.algo;
 
-import sun.security.pkcs11.wrapper.CK_ATTRIBUTE;
 import sun.security.pkcs11.wrapper.CK_MECHANISM;
 import sun.security.pkcs11.wrapper.PKCS11;
 import sun.security.pkcs11.wrapper.PKCS11Exception;
@@ -46,34 +45,17 @@ public class Symmetric {
      * @param hSession Handle to the active PKCS#11 session.
      * @param hashMech The hashing mechanism to use (e.g., CKM_SHA_256).
      * @param data The data to hash.
-     * @param dataLen Length of the data to hash.
+     * @param digestLen Length of the digest.
      * @return The computed hash as a byte array.
      * @throws PKCS11Exception If an error occurs during hashing.
      */
-    public static byte[] shaHashData(PKCS11 p11, long hSession, CK_MECHANISM hashMech, byte[] data, long dataLen) throws PKCS11Exception {
-        byte[] hash = null;
+    public static byte[] hashData(PKCS11 p11, long hSession, CK_MECHANISM hashMech, int digestLen,byte[] data) throws PKCS11Exception {
+        byte[] hash = new byte[digestLen];
 
         // Perform a single-step digest operation
-        p11.C_DigestSingle(hSession, hashMech, data, 0, data.length, hash, 0, data.length);
+        p11.C_DigestSingle(hSession, hashMech, data, 0, data.length, hash, 0, digestLen);
 
         return hash;
-    }
-
-    /**
-     * Generates a symmetric key using a specified key generation mechanism.
-     *
-     * @param p11 PKCS#11 wrapper instance.
-     * @param session Handle to the active PKCS#11 session.
-     * @param template Template defining the attributes of the key (e.g., label, usage).
-     * @param mechanismType The key generation mechanism to use (e.g., CKM_AES_KEY_GEN).
-     * @param keyName The name (label) assigned to the generated key.
-     * @param bPrivate If true, the key is created as a private object.
-     * @return The handle of the generated symmetric key.
-     * @throws PKCS11Exception If an error occurs during key generation.
-     */
-    public static long generateKey(PKCS11 p11, long session, CK_ATTRIBUTE[] template, long mechanismType, String keyName, boolean bPrivate) throws PKCS11Exception {
-        CK_MECHANISM keyGenMech = new CK_MECHANISM(mechanismType);
-        return p11.C_GenerateKey(session, keyGenMech, template);
     }
 
 }
