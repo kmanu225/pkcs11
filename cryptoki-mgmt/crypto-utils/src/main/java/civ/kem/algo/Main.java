@@ -14,15 +14,28 @@ public class Main {
         String text = "Hello PKCS#11 :)";
         System.out.println(text);
 
-        // Symmetric functions
         try {
             PKCS11 p11 = Utils.setMonoThreadedCryptokiFunctions();
             long slotId = 1;
             long flags = PKCS11Constants.CKF_SERIAL_SESSION;
             long hSession = Utils.openSession(p11, slotId, flags);
 
+            // Symmetric functions
+            System.out.println("TEST SYMMETRIC FUNCTIONS");
             encryptDecrypt(p11, hSession, new CK_MECHANISM(PKCS11Constants.CKM_AES_ECB), text.getBytes());
             sha2(p11, hSession, new CK_MECHANISM(PKCS11Constants.CKM_SHA256), 32, text.getBytes());
+
+            // Random numers
+             System.out.println("\n\nTEST RANDOM NUMBER GENERATION");
+            byte[] randomData = new byte[20];
+            Random.generateRandomData(p11, hSession, randomData, hSession);
+            System.out.println("Random value: " + HexFormat.of().formatHex(randomData));
+
+            String seed = "deadbeefdeadbeef";
+            Utils.println("Seed value: " + seed);
+            byte[] bSeed = HexFormat.of().parseHex(seed);
+            Random.seedRandom(p11, hSession, bSeed);
+            Utils.println("Modified value of the seed : " + HexFormat.of().formatHex(bSeed));
 
             Utils.closeSession(p11, hSession);
 

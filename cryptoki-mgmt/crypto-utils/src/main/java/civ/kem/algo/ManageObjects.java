@@ -10,13 +10,15 @@ public class ManageObjects {
     /**
      * Searches for an object on a token matching the provided template.
      *
-     * This method initializes a search for objects that match the given template,
-     * which could be used to locate keys, certificates, or other PKCS#11 objects.
-     * It returns the handle of the first matching object.
+     * This method initializes a search for objects that match the given
+     * template, which could be used to locate keys, certificates, or other
+     * PKCS#11 objects. It returns the handle of the first matching object.
      *
      * @param p11 PKCS#11 wrapper instance used to interact with the token.
-     * @param hSession Handle to the open PKCS#11 session associated with the token.
-     * @param template Cryptoki template defining the desired object's attributes.
+     * @param hSession Handle to the open PKCS#11 session associated with the
+     * token.
+     * @param template Cryptoki template defining the desired object's
+     * attributes.
      * @return The handle of the first object found that matches the template.
      * @throws Exception If no matching object is found.
      */
@@ -40,29 +42,35 @@ public class ManageObjects {
     /**
      * Deletes an object from the token.
      *
-     * This method destroys a specified object (such as a key or certificate) from the token,
-     * effectively removing it.
+     * This method destroys a specified object (such as a key or certificate)
+     * from the token, effectively removing it.
      *
      * @param p11 PKCS#11 wrapper instance used to interact with the token.
-     * @param hSession Handle to the open PKCS#11 session associated with the token.
+     * @param hSession Handle to the open PKCS#11 session associated with the
+     * token.
      * @param hObject The handle of the object to be destroyed.
-     * @throws PKCS11Exception If an error occurs during the object destruction process.
+     * @throws PKCS11Exception If an error occurs during the object destruction
+     * process.
      */
     public static void delete(PKCS11 p11, long hSession, long hObject) throws PKCS11Exception {
         p11.C_DestroyObject(hSession, hObject);
     }
 
     /**
-     * Derives a new cryptographic key based on a provided base key using the specified mechanism.
+     * Derives a new cryptographic key based on a provided base key using the
+     * specified mechanism.
      *
-     * This method uses a cryptographic mechanism (e.g., CKM_ECDH1_DERIVE) to generate
-     * a new key from a base key. The new key's attributes are defined by the provided template.
+     * This method uses a cryptographic mechanism (e.g., CKM_ECDH1_DERIVE) to
+     * generate a new key from a base key. The new key's attributes are defined
+     * by the provided template.
      *
      * @param p11 PKCS#11 wrapper instance used to interact with the token.
-     * @param hSession Handle to the open PKCS#11 session associated with the token.
+     * @param hSession Handle to the open PKCS#11 session associated with the
+     * token.
      * @param mechanism The cryptographic mechanism used for key derivation.
      * @param hBaseKey The handle of the base key used for derivation.
-     * @param newObjTpl The template specifying attributes for the new derived key.
+     * @param newObjTpl The template specifying attributes for the new derived
+     * key.
      * @return The handle of the newly derived key.
      * @throws PKCS11Exception If an error occurs during the key derivation.
      */
@@ -71,17 +79,22 @@ public class ManageObjects {
     }
 
     /**
-     * Wraps a cryptographic key using another key and a specified wrapping mechanism.
+     * Wraps a cryptographic key using another key and a specified wrapping
+     * mechanism.
      *
-     * This method encrypts (wraps) the specified key using a wrapping key and a cryptographic
-     * mechanism (e.g., RSA, AES Key Wrap). The resulting wrapped key can be securely
-     * transferred or stored.
+     * This method encrypts (wraps) the specified key using a wrapping key and a
+     * cryptographic mechanism (e.g., RSA, AES Key Wrap). The resulting wrapped
+     * key can be securely transferred or stored.
      *
      * @param p11 PKCS#11 wrapper instance used to interact with the token.
-     * @param hSession Handle to the open PKCS#11 session associated with the token.
-     * @param mechanism The mechanism used for wrapping (e.g., CKM_AES_KEY_WRAP, CKM_RSA_PKCS).
-     * @param wrappingKeyTemplate Template containing attributes to identify the wrapping key.
-     * @param keyToWrapTemplate Template containing attributes to identify the key to be wrapped.
+     * @param hSession Handle to the open PKCS#11 session associated with the
+     * token.
+     * @param mechanism The mechanism used for wrapping (e.g., CKM_AES_KEY_WRAP,
+     * CKM_RSA_PKCS).
+     * @param wrappingKeyTemplate Template containing attributes to identify the
+     * wrapping key.
+     * @param keyToWrapTemplate Template containing attributes to identify the
+     * key to be wrapped.
      * @return The wrapped key as a byte array.
      * @throws Exception If an error occurs during the key wrapping process.
      */
@@ -92,18 +105,24 @@ public class ManageObjects {
     }
 
     /**
-     * Unwraps an encrypted key using another key and a specified unwrapping mechanism.
+     * Unwraps an encrypted key using another key and a specified unwrapping
+     * mechanism.
      *
-     * This method decrypts (unwraps) a previously wrapped key using an unwrapping key and
-     * a cryptographic mechanism (e.g., CKM_AES_KEY_WRAP, CKM_RSA_PKCS). The resulting key
-     * is stored on the token with the attributes defined in the provided template.
+     * This method decrypts (unwraps) a previously wrapped key using an
+     * unwrapping key and a cryptographic mechanism (e.g., CKM_AES_KEY_WRAP,
+     * CKM_RSA_PKCS). The resulting key is stored on the token with the
+     * attributes defined in the provided template.
      *
      * @param p11 PKCS#11 wrapper instance used to interact with the token.
-     * @param hSession Handle to the open PKCS#11 session associated with the token.
-     * @param mechanism The mechanism used for unwrapping (e.g., CKM_AES_KEY_WRAP, CKM_RSA_PKCS).
-     * @param unWrappingKeyTemplate Template containing attributes to identify the unwrapping key.
+     * @param hSession Handle to the open PKCS#11 session associated with the
+     * token.
+     * @param mechanism The mechanism used for unwrapping (e.g.,
+     * CKM_AES_KEY_WRAP, CKM_RSA_PKCS).
+     * @param unWrappingKeyTemplate Template containing attributes to identify
+     * the unwrapping key.
      * @param wrappedKey The wrapped (encrypted) key in a byte array.
-     * @param newKeyTemplate The template defining attributes of the unwrapped key.
+     * @param newKeyTemplate The template defining attributes of the unwrapped
+     * key.
      * @return The handle of the unwrapped key.
      * @throws Exception If an error occurs during the key unwrapping process.
      */
